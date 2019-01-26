@@ -1,0 +1,2 @@
+ALTER USER postgres WITH PASSWORD 'root';
+CREATE SCHEMA crud_user AUTHORIZATION postgres;

@@ -1,0 +1,44 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: crud-app-demo-1
+  name: crud-app-demo-1
+  namespace: dev
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: crud-app-demo-1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: crud-app-demo-1
+    spec:
+      containers:
+      - image: asia.gcr.io/hip-microservices-experiment-2/crud-demo-app@sha256:13c80b452d654a069d9a3c4ad2b704ba8430e8a0613d353bb40942ae360464ae
+        ports:
+        - containerPort: 8080
+        name: crud-app-demo-1
+        envFrom:
+        - configMapRef:
+            name: crud-app-demo-1-config
+        env:
+          - name: SPRING_DATASOURCE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-creds
+                key: postgres-password
+          - name: SPRING_DATASOURCE_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: postgres-creds
+                key: postgres-username
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 60
+

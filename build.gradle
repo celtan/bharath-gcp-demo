@@ -1,0 +1,35 @@
+buildscript {
+	ext {
+		springBootVersion = '1.5.3.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+		mavenLocal()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath("org.postgresql:postgresql:9.4-1206-jdbc42")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+	mavenLocal()
+}
+
+
+dependencies {
+	compile 'org.springframework.boot:spring-boot-starter'
+	compile 'org.springframework.boot:spring-boot-starter-web'
+	compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+	compile 'org.springframework.boot:spring-boot-starter-actuator'
+	compile 'com.wacai:spring-boot-starter-logback-access:1.0.0-SNAPSHOT'
+	runtime 'org.postgresql:postgresql:9.4-1206-jdbc42'
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+}
