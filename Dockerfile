@@ -20,4 +20,4 @@ RUN find / -perm +6000 -type f -exec chmod a-s {} \; || true
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-Xmx1024m", "-Xmn650m", "-jar", "app.jar"]

@@ -6,7 +6,7 @@ metadata:
   name: crud-app-demo-1-v1
   namespace: dev
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: crud-app-demo-1
@@ -22,13 +22,20 @@ spec:
         version: v1
     spec:
       containers:
-      - image: asia.gcr.io/hip-microservices-experiment-2/crud-demo-app@sha256:13c80b452d654a069d9a3c4ad2b704ba8430e8a0613d353bb40942ae360464ae
+      - image: asia.gcr.io/hip-microservices-experiment-2/crud-demo-app@sha256:c34e849d729087c4cdfb0673ce77b17b52cc2845b77b50b7f186b5cb4b766b59
         ports:
         - containerPort: 8080
         name: crud-app-demo-1
         envFrom:
         - configMapRef:
             name: crud-app-demo-1-config
+        resources:
+          requests:
+            memory: "2560Mi"
+            cpu: "1024m"
+          limits:
+            memory: "4096Mi"
+            cpu: "2048m"
         env:
           - name: SPRING_DATASOURCE_PASSWORD
             valueFrom:
