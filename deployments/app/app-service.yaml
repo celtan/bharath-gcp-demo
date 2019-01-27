@@ -3,15 +3,14 @@ kind: Service
 metadata:
   labels:
     app: crud-app-demo-1
-  name: crud-app-demo-1-service
+  name: crud-app-demo-1
   namespace: dev
 spec:
-  externalTrafficPolicy: Cluster
-  sessionAffinity: None
   selector:
     app: crud-app-demo-1
   ports:
-    - port: 80
-      targetPort: 8080
+  - port: 80
+    targetPort: 8080
+    name: http
   type: LoadBalancer
 

@@ -1,0 +1,15 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: postgres-db-external
+spec:
+  hosts:
+  - 10.83.48.3
+  addresses:
+  - 10.83.48.0/24
+  ports:
+  - name: tcp-egress
+    number: 5432
+    protocol: tcp
+  location: MESH_EXTERNAL
+

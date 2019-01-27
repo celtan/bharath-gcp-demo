@@ -3,10 +3,10 @@ kind: Deployment
 metadata:
   labels:
     app: crud-app-demo-1
-  name: crud-app-demo-1
+  name: crud-app-demo-1-v1
   namespace: dev
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: crud-app-demo-1
@@ -19,6 +19,7 @@ spec:
     metadata:
       labels:
         app: crud-app-demo-1
+        version: v1
     spec:
       containers:
       - image: asia.gcr.io/hip-microservices-experiment-2/crud-demo-app@sha256:13c80b452d654a069d9a3c4ad2b704ba8430e8a0613d353bb40942ae360464ae
