@@ -19,7 +19,7 @@ metadata:
   name: crud-app-demo-1
 spec:
   hosts:
-  - "crud-app-demo-1"
+  - "*"
   gateways:
   - crud-app-demo-1-gateway
   http:

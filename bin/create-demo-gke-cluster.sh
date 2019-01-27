@@ -22,10 +22,10 @@ DEPLOYMENT_CONF_PATH=${HOME}/../deployments
 CLUSTER_NAME=${1:-app-demo-test-cluster-1}
 
 # 1. Create GKE compute cluster
-gcloud beta container --project "hip-microservices-experiment-2" clusters create "${CLUSTER_NAME}" --region "australia-southeast1" --username "admin" --cluster-version "1.11.5-gke.5" --machine-type "n1-standard-2" --image-type "COS" --disk-type "pd-standard" --disk-size "50" --scopes "https://www.googleapis.com/auth/devstorage.read_only","https://www.googleapis.com/auth/logging.write","https://www.googleapis.com/auth/monitoring","https://www.googleapis.com/auth/servicecontrol","https://www.googleapis.com/auth/service.management.readonly","https://www.googleapis.com/auth/trace.append" --num-nodes "1" --enable-cloud-logging --enable-cloud-monitoring --enable-ip-alias --network "projects/hip-microservices-experiment-2/global/networks/default" --subnetwork "projects/hip-microservices-experiment-2/regions/australia-southeast1/subnetworks/default" --default-max-pods-per-node "110" --addons HorizontalPodAutoscaling,HttpLoadBalancing,KubernetesDashboard --enable-autoupgrade --enable-autorepair
+gcloud beta container --project "hip-microservices-experiment-2" clusters create "${CLUSTER_NAME}" --region "australia-southeast1" --username "admin" --cluster-version "1.11.5-gke.5" --machine-type "n1-standard-2" --image-type "COS" --disk-type "pd-standard" --disk-size "50" --scopes "https://www.googleapis.com/auth/devstorage.read_only","https://www.googleapis.com/auth/logging.write","https://www.googleapis.com/auth/monitoring","https://www.googleapis.com/auth/servicecontrol","https://www.googleapis.com/auth/service.management.readonly","https://www.googleapis.com/auth/trace.append" --num-nodes "1" --enable-cloud-logging --enable-cloud-monitoring --enable-ip-alias --network "projects/hip-microservices-experiment-2/global/networks/default" --subnetwork "projects/hip-microservices-experiment-2/regions/australia-southeast1/subnetworks/default" --default-max-pods-per-node "110" --addons HorizontalPodAutoscaling,HttpLoadBalancing,KubernetesDashboard,Istio --istio-config auth=MTLS_PERMISSIVE --enable-autoupgrade --enable-autorepair 
 
 # Authenticate to cluster
-gcloud container clusters get-credentials ${CLUSTER_NAME} --region australia-southeast1
+# gcloud container clusters get-credentials ${CLUSTER_NAME} --region australia-southeast1
 
 # 2. Create app namespace
 kubectl create -f ${DEPLOYMENT_CONF_PATH}/namespace.yaml
@@ -41,10 +41,10 @@ else
 fi
 
 # 5. Create app deployment
-kubectl create -f ${DEPLOYMENT_CONF_PATH}/app/app-deployment.yaml
+# kubectl create -f ${DEPLOYMENT_CONF_PATH}/app/app-deployment.yaml
 
 # 6. Create app service
-kubectl create -f ${DEPLOYMENT_CONF_PATH}/app/app-service.yaml
+#kubectl create -f ${DEPLOYMENT_CONF_PATH}/app/app-service.yaml
 
 # Test app service
 
