@@ -27,7 +27,7 @@ spec:
     - uri:
         prefix: /api
     - uri:
-        prefix: /
+        exact: /api
     route:
     - destination:
         host: crud-app-demo-1
