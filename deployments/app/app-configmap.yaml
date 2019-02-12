@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: crud-app-demo-1-config
+  name: crud-app-demo-2-config
   labels:
-    app: crud-app-demo
+    app: crud-app-demo-2
     env: dev
   namespace: dev
 data:

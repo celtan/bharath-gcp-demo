@@ -1,0 +1,149 @@
+---
+# Source: signalfx-agent/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: signalfx-agent
+  labels:
+    app: signalfx-agent
+data:
+  agent.yaml: |
+    signalFxAccessToken: ${SFX_ACCESS_TOKEN}
+
+    intervalSeconds: 10
+
+    logging:
+      level: info
+
+    globalDimensions:
+      kubernetes_cluster: app-demo-cluster-1
+
+    sendMachineID: false
+
+    etcPath: /hostfs/etc
+    procPath: /hostfs/proc
+    runPath: /hostfs/run
+    varPath: /hostfs/var
+    sysPath: /hostfs/sys
+
+    observers:
+    - type: k8s-api
+
+    monitors:
+    - type: collectd/cpu
+    - type: collectd/cpufreq
+    - type: collectd/df
+      hostFSPath: /hostfs
+    - type: collectd/disk
+    - type: collectd/interface
+    - type: collectd/load
+    - type: collectd/memory
+    - type: collectd/protocols
+    - type: collectd/signalfx-metadata
+    - type: host-metadata
+    - type: collectd/uptime
+    - type: collectd/vmem
+
+    - type: collectd/processes
+      processes:
+      - collectd
+      - signalfx-agent
+
+    - type: kubelet-stats
+      kubeletAPI:
+        authType: none
+        # Replace the above with the following if using GKE/PKE or any
+        # environment where RBAC is not effective for the kubelet's /stats
+        # endpoint
+        # authType: none
+        url: http://localhost:10255
+
+    # Collects k8s cluster-level metrics
+    - type: kubernetes-cluster
+      useNodeName: true
+
+    - type: docker-container-stats
+      dockerURL: unix:///var/run/docker.sock
+      excludedImages:
+       - '*pause-amd64*'
+      labelsToDimensions:
+        io.kubernetes.container.name: container_spec_name
+        io.kubernetes.pod.name: kubernetes_pod_name
+        io.kubernetes.pod.uid: kubernetes_pod_uid
+        io.kubernetes.pod.namespace: kubernetes_namespace
+
+    - type: collectd/activemq
+      discoveryRule: container_image =~ "activemq" && private_port == 1099
+
+    - type: collectd/apache
+      discoveryRule: container_image =~ "apache" && private_port == 80
+
+    - type: collectd/cassandra
+      discoveryRule: container_image =~ "cassandra" && private_port == 7199
+
+    - type: collectd/consul
+      discoveryRule: container_image =~ "consul" && private_port == 8500
+
+    - type: collectd/elasticsearch
+      discoveryRule: container_image =~ "elasticsearch" && port == 9200
+
+    - type: collectd/etcd
+      discoveryRule: container_image =~ "etcd" && port == 2379
+      clusterName: my-cluster
+
+    - type: collectd/haproxy
+      discoveryRule: container_image =~ "haproxy" && port == 9000
+
+    - type: collectd/kafka
+      discoveryRule: container_image =~ "kafka" && private_port == 9092
+
+    - type: collectd/memcached
+      discoveryRule: container_image =~ "memcache" && private_port == 11211
+
+    - type: collectd/mongodb
+      discoveryRule: container_image =~ "mongo" && private_port == 27017
+      databases:
+      - mydatabase
+
+    - type: collectd/mysql
+      discoveryRule: container_image =~ "mysql" && private_port == 3306
+      databases:
+      - name: mydb
+      username: admin
+
+    - type: collectd/nginx
+      discoveryRule: container_image =~ "nginx" && private_port == 80
+
+    - type: collectd/rabbitmq
+      discoveryRule: container_image =~ "rabbitmq" && private_port == 15672
+
+    - type: collectd/redis
+      discoveryRule: container_image =~ "redis" && private_port == 6379
+
+    - type: collectd/spark
+      discoveryRule: container_image =~ "spark" && private_port == 8080
+      clusterType: Standalone
+      collectApplicationMetrics: true
+      isMaster: true
+
+    - type: collectd/spark
+      discoveryRule: container_image =~ "spark" && private_port >= 8081
+      clusterType: Standalone
+      isMaster: false
+
+    - type: collectd/zookeeper
+      discoveryRule: container_image =~ "zookeeper" && private_port == 2181
+
+    collectd:
+      readThreads: 5
+      writeQueueLimitHigh: 500000
+      writeQueueLimitLow: 400000
+      timeout: 40
+      logLevel: info
+
+    metricsToExclude:
+      - {"#from": "/lib/whitelist.json", flatten: true}
+      # The StackDriver metadata-agent pod on GKE restarts every few minutes so
+      # ignore its containers
+      - dimensions:
+          container_spec_name: metadata-agent

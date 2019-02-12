@@ -2,14 +2,14 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   labels:
-    app: crud-app-demo-1
-  name: crud-app-demo-1-v1
+    app: crud-app-demo-2
+  name: crud-app-demo-2-v1
   namespace: dev
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: crud-app-demo-1
+      app: crud-app-demo-2
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -18,24 +18,24 @@ spec:
   template:
     metadata:
       labels:
-        app: crud-app-demo-1
+        app: crud-app-demo-2
         version: v1
     spec:
       containers:
       - image: asia.gcr.io/hip-microservices-experiment-2/crud-demo-app@sha256:c34e849d729087c4cdfb0673ce77b17b52cc2845b77b50b7f186b5cb4b766b59
         ports:
         - containerPort: 8080
-        name: crud-app-demo-1
+        name: crud-app-demo-2
         envFrom:
         - configMapRef:
-            name: crud-app-demo-1-config
+            name: crud-app-demo-2-config
         resources:
           requests:
-            memory: "2560Mi"
-            cpu: "1024m"
+            memory: "1536Mi"
+            cpu: "512m"
           limits:
-            memory: "4096Mi"
-            cpu: "2048m"
+            memory: "2048Mi"
+            cpu: "1024m"
         env:
           - name: SPRING_DATASOURCE_PASSWORD
             valueFrom:
