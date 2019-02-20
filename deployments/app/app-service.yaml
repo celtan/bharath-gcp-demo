@@ -12,5 +12,6 @@ spec:
   - port: 8080
 #    targetPort: 8080
     name: http
-#  type: LoadBalancer
+#  type: LoadBalancer # If using istio ingress gateway, ensure load balancer is unchecked
+
 
