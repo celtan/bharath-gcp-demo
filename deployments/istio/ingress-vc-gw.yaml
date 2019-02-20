@@ -27,10 +27,10 @@ spec:
     - uri:
         prefix: /api
     - uri:
-        exact: /api
+        prefix: /
     route:
     - destination:
-        host: crud-app-demo-1
+        host: crud-app-demo-1.dev.svc.cluster.local
         port:
           number: 8080
 

@@ -25,7 +25,7 @@ spec:
       # Use host network so we can access kubelet directly
       hostNetwork: true
       restartPolicy: Always
-      serviceAccountName: signalfx
+#      serviceAccountName: gcp-microservices-admins
 
       tolerations:
       - effect: NoSchedule

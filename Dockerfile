@@ -11,6 +11,7 @@ RUN mkdir -p ${APP_HOME}
 
 COPY src/main/resources/application.properties ${APP_HOME}/
 COPY build/libs/*.jar ${APP_HOME}/app.jar
+COPY signalfx-tracing.jar ${APP_HOME}/
 
 WORKDIR ${APP_HOME}
 RUN chown -R appuser:appuser ${APP_HOME}
@@ -20,4 +21,4 @@ RUN find / -perm +6000 -type f -exec chmod a-s {} \; || true
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-Xmx1024m", "-Xmn650m", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-Xmx1024m", "-Xmn650m", "-javaagent:/opt/app/signalfx-tracing.jar", "-jar", "app.jar"]

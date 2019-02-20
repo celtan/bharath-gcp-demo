@@ -1,8 +1,8 @@
 #!/bin/bash
 
-HOST=localhost
+HOST=35.201.13.99
 
-for i in $(seq 3 10000); do
+for i in $(seq 10000 20000); do
 curl -X POST \
   http://${HOST}:80/api/ \
   -H 'Content-Type: application/json' \

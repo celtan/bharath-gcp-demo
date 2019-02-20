@@ -30,6 +30,8 @@ dependencies {
 	compile 'org.springframework.boot:spring-boot-starter-data-jpa'
 	compile 'org.springframework.boot:spring-boot-starter-actuator'
 	compile 'com.wacai:spring-boot-starter-logback-access:1.0.0-SNAPSHOT'
+        compile 'com.signalfx.public:signalfx-codahale:0.0.48'
+        compile 'com.signalfx.public:signalfx-yammer:0.0.48'
 	runtime 'org.postgresql:postgresql:9.4-1206-jdbc42'
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
