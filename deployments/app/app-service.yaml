@@ -14,4 +14,3 @@ spec:
     name: http
 #  type: LoadBalancer # If using istio ingress gateway, ensure load balancer is unchecked
 
-

@@ -21,8 +21,9 @@ spec:
         app: crud-app-demo-1
         version: v1
     spec:
+      hostNetwork: true
       containers:
-      - image: asia.gcr.io/hip-microservices-experiment-2/crud-demo-app@sha256:68d6e0a4bca86dc5afed9f74d04ec70e07ffe37e801c18ac527ee560a628d3c5
+      - image: asia.gcr.io/hip-microservices-experiment-2/crud-demo-app@sha256:1d0d20effaf07fca9acbdf5b5d8330f2b917793ddfb72e9e81c3ae45d4bcf851
         ports:
         - containerPort: 8080
         name: crud-app-demo-1
@@ -47,6 +48,10 @@ spec:
               secretKeyRef:
                 name: postgres-creds
                 key: postgres-username
+          - name: SFX_AGENT_HOST
+            valueFrom:
+              fieldRef:
+                fieldPath: status.hostIP
       restartPolicy: Always
       terminationGracePeriodSeconds: 60
 
