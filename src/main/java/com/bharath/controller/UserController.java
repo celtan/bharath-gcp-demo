@@ -33,6 +33,12 @@ public class UserController {
         LOGGER.info("event=loadAllUsers");
         try {
             long start = System.currentTimeMillis();
+            try {
+                Thread.sleep(2000);
+            }
+            catch(InterruptedException e) {
+                LOGGER.error("message="+e.getMessage());
+            }
             List<User> users = userService.findAll();
             long end = System.currentTimeMillis();
             LOGGER.info("event=searchAll, method=GET, count={}, elapsed_time_ms={}", users.size(), (end-start));

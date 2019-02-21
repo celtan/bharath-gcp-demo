@@ -31,6 +31,28 @@ spec:
     route:
     - destination:
         host: crud-app-demo-1.dev.svc.cluster.local
+        subset: v1
         port:
           number: 8080
+      weight: 99
+    - destination:
+        host: crud-app-demo-1.dev.svc.cluster.local
+        subset: v2
+        port:
+          number: 8080
+      weight: 1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: crud-app-demo-1
+spec:
+  host: crud-app-demo-1.dev.svc.cluster.local
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+  - name: v2
+    labels:
+      version: v2
 
