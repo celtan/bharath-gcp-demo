@@ -1,0 +1,14 @@
+---
+# Source: signalfx-istio-adapter/templates/rules-tracing.yaml
+apiVersion: config.istio.io/v1alpha2
+kind: rule
+metadata:
+  name: signalfxtracing
+  namespace: istio-system
+spec:
+  actions:
+  - handler: signalfx.istio-system
+    instances:
+    - signalfxtracespan
+  match: (context.protocol == "http" || context.protocol == "grpc") && request.host != "mixer"
+
