@@ -23,7 +23,7 @@ spec:
     spec:
       hostNetwork: true
       containers:
-      - image: asia.gcr.io/hip-microservices-experiment-2/crud-demo-app@sha256:4412d25597f50c68ed25f88dc91345e54860ec81180289947d1c8e577a941198
+      - image: asia.gcr.io/hip-microservices-experiment-2/crud-demo-app@sha256:8037b6cfc6094f51feb6c7a3950ec76bbeba969c4aa8479a1b16c048d65d70aa
         ports:
         - containerPort: 8080
         name: crud-app-demo-1

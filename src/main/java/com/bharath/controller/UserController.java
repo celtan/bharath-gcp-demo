@@ -34,7 +34,7 @@ public class UserController {
         try {
             long start = System.currentTimeMillis();
             try {
-                Thread.sleep(2000);
+                Thread.sleep(20000);
             }
             catch(InterruptedException e) {
                 LOGGER.error("message="+e.getMessage());
