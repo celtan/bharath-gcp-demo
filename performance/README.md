@@ -17,3 +17,8 @@ $ nohup artillery run load_test.config > load_test_fullTableScan.out 2>&1
 Please ensure you have a sufficiently large compute node when running these tests.
 Recommended compute node: 2 vCPUs and 4 GB RAM
 
+## Misc
+
+```
+curl -s http://${INGRESS_HOST}/api | jq length
+```
