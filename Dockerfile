@@ -10,7 +10,7 @@ RUN mkdir -p ${APP_HOME}
 
 COPY src/main/resources/application.properties ${APP_HOME}/
 COPY build/libs/*.jar ${APP_HOME}/app.jar
-COPY signalfx-tracing.jar ${APP_HOME}/
+COPY bin/signalfx-tracing.jar ${APP_HOME}/
 COPY bin/app-start.sh ${APP_HOME}/
 
 WORKDIR ${APP_HOME}
