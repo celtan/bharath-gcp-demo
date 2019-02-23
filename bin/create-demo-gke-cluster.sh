@@ -1,4 +1,4 @@
-#!/bin/bash
+#/bin/bash
 
 # Author: Bharath Raj
 # This script is collection of kubectl and gcp commands to do the following - 
@@ -7,11 +7,16 @@
 # 3. Create app config map
 # 4. Create app secrets
 # 5. Create istio egress rules
-# 6. Create app deployment
-# 7. Create app service for exposure
+# 6. Deploy app version 1
+# 7. Create app service 
 # 8. Create istio ingress gateway
-# 9. Monitor the app service
-# 10. Test app service
+# 9. Deploy monitoring daemon set, tracing agent and istio monitor
+# 10. Test app version 1
+# 11. Check istio gateway's health
+# 11. Deploy app version 2
+# 12. Deploy istio canary config
+# 13. Test app in canary mode
+# 14. Cluster creation complete!
 
 # The other objective of this script is to see how quickly 
 # we can create a GKE cluster and many such apps from scratch
@@ -21,12 +26,13 @@
 # This script needs to be run with appropriate IAM role that has
 # privileges for provisioning all the resources
 
+SECONDS=0
 HOME=$(dirname $0)
 DEPLOYMENT_CONF_PATH=${HOME}/../deployments
 CLUSTER_NAME=${1:-crud-app-demo-cluster-1}
 
 # 1. Create GKE compute cluster
-gcloud beta container --project "hip-microservices-experiment-2" clusters create "${CLUSTER_NAME}" --region "australia-southeast1" --username "admin" --cluster-version "1.11.6-gke.11" --machine-type "n1-standard-4" --image-type "COS" --disk-type "pd-standard" --disk-size "50" --scopes "https://www.googleapis.com/auth/devstorage.read_only","https://www.googleapis.com/auth/logging.write","https://www.googleapis.com/auth/monitoring","https://www.googleapis.com/auth/servicecontrol","https://www.googleapis.com/auth/service.management.readonly","https://www.googleapis.com/auth/trace.append" --num-nodes "2" --enable-ip-alias --network "projects/hip-microservices-experiment-2/global/networks/default" --subnetwork "projects/hip-microservices-experiment-2/regions/australia-southeast1/subnetworks/default" --default-max-pods-per-node "110" --addons HorizontalPodAutoscaling,HttpLoadBalancing,KubernetesDashboard,Istio --istio-config auth=MTLS_PERMISSIVE --enable-autoupgrade --enable-autorepair --enable-stackdriver-kubernetes
+gcloud beta container --project "hip-microservices-experiment-2" clusters create "${CLUSTER_NAME}" --region "australia-southeast1" --username "admin" --cluster-version "1.11.6-gke.11" --machine-type "n1-standard-4" --image-type "COS" --disk-type "pd-standard" --disk-size "50" --scopes "https://www.googleapis.com/auth/devstorage.read_only","https://www.googleapis.com/auth/logging.write","https://www.googleapis.com/auth/monitoring","https://www.googleapis.com/auth/servicecontrol","https://www.googleapis.com/auth/service.management.readonly","https://www.googleapis.com/auth/trace.append" --num-nodes "2" --enable-cloud-logging --enable-cloud-monitoring --enable-ip-alias --network "projects/hip-microservices-experiment-2/global/networks/default" --subnetwork "projects/hip-microservices-experiment-2/regions/australia-southeast1/subnetworks/default" --default-max-pods-per-node "110" --addons HorizontalPodAutoscaling,HttpLoadBalancing,KubernetesDashboard,Istio --istio-config auth=MTLS_PERMISSIVE --enable-autoupgrade --enable-autorepair 
 
 # Authenticate to cluster
 # gcloud container clusters get-credentials ${CLUSTER_NAME} --region australia-southeast1
@@ -75,7 +81,7 @@ done
 
 # Check istio gateway's health
 status=$(curl -I -s http://${INGRESS_HOST}/api | head -n1 | awk '{print $2}')
-while [ -z ${istio_status} ]; do
+while [ -z ${status} ]; do
   echo "No response from gateway yet. Retrying..."
   status=$(curl -I -s http://${INGRESS_HOST}/api | head -n1 | awk '{print $2}')
   sleep 2
@@ -85,6 +91,7 @@ done
 status=$(curl -I -s http://${INGRESS_HOST}/api | head -n1 | awk '{print $2}')
 while [ ${status} -ne 200 ]; do
   echo "App isn't responsive yet. Retrying..."
+  status=$(curl -I -s http://${INGRESS_HOST}/api | head -n1 | awk '{print $2}')
   sleep 2
 done
 
@@ -103,3 +110,5 @@ while [ ${status} -ne 200 ]; do
   sleep 2
 done
 
+# 14. Cluster creation complete
+echo "INFO: GKE cluster with master, etcd, worker nodes along with application v1, v2, istio and monitoring took ${SECONDS} seconds to complete!"
