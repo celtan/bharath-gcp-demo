@@ -10,4 +10,5 @@ data:
   SPRING_DATASOURCE_URL: jdbc:postgresql://10.83.48.3:5432/postgres
   SFX_SERVICE_NAME: crud-app-demo-1
   JAEGER_SERVICE_NAME: crud-app-demo-1
+  JAEGER_PROPAGATION: b3
 

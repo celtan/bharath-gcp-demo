@@ -53,16 +53,10 @@ fi
 # 5. Create istio egress rules
 kubectl apply -f ${DEPLOYMENT_CONF_PATH}/istio/postgres-egress-entry.yaml
 
-# 6. Deploy app v1
-kubectl apply -f ${DEPLOYMENT_CONF_PATH}/app/app-deployment.yaml
-
-# 7. Create app service
-kubectl apply -f ${DEPLOYMENT_CONF_PATH}/app/app-service.yaml
-
-# 8. Create istio ingress gateway
+# 6. Create istio ingress gateway
 kubectl apply -f ${DEPLOYMENT_CONF_PATH}/istio/ingress-gw.yaml
 
-# 9. Monitoring - SignalFX
+# 7. Monitoring - SignalFX
 
 if [[ -z ${SIGNALFX_ACCESS_TOKEN} || -z ${SIGNALFX_ISTIO_ACCESS_TOKEN} ]]; then
   echo "WARN: SignalFX: No secrets set. Skipping"
@@ -71,6 +65,12 @@ else
   cat ${DEPLOYMENT_CONF_PATH}/signalfx/signalfx-smart-agent/*.yaml | kubectl apply -f -
   cat ${DEPLOYMENT_CONF_PATH}/signalfx/signalfx-istio-adapter/*.yaml | sed -e "s/MY_ACCESS_TOKEN/${SIGNALFX_ISTIO_ACCESS_TOKEN}/" | kubectl apply -f -
 fi
+
+# 8. Deploy app v1
+kubectl apply -f ${DEPLOYMENT_CONF_PATH}/app/app-deployment.yaml
+
+# 9. Create app service
+kubectl apply -f ${DEPLOYMENT_CONF_PATH}/app/app-service.yaml
 
 # 10. Test app v1
 while [ -z ${INGRESS_HOST} ]; do
