@@ -7,10 +7,10 @@
 # 3. Create app config map
 # 4. Create app secrets
 # 5. Create istio egress rules
-# 6. Deploy app version 1
-# 7. Create app service 
-# 8. Create istio ingress gateway
-# 9. Deploy monitoring daemon set, tracing agent and istio monitor
+# 6. Create istio ingress gateway
+# 7. Deploy monitoring daemon set, tracing agent and istio monitor
+# 8. Deploy app version 1
+# 9. Create app service
 # 10. Test app version 1
 # 11. Check istio gateway's health
 # 11. Deploy app version 2
