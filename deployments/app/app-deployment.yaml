@@ -43,6 +43,11 @@ spec:
               secretKeyRef:
                 name: postgres-creds
                 key: postgres-password
+          - name: MANAGEMENT_METRICS_EXPORT_SIGNALFX_ACCESS-TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: signalfx-token
+                key: signalfx-token
           - name: SPRING_DATASOURCE_USERNAME
             valueFrom:
               secretKeyRef:

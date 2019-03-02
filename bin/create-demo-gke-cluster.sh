@@ -44,10 +44,11 @@ kubectl apply -f ${DEPLOYMENT_CONF_PATH}/namespace.yaml
 kubectl apply -f ${DEPLOYMENT_CONF_PATH}/app/app-configmap.yaml
 
 # 4. Create app secrets
-if [[ -z ${POSTGRES_USERNAME} || -z ${POSTGRES_PASSWORD} ]]; then
+if [[ -z ${POSTGRES_USERNAME} || -z ${POSTGRES_PASSWORD} || -z ${SIGNALFX_APP_ACCESS_TOKEN} ]]; then
   echo "WARN: Postgres: No secrets set. Skipping"
 else
   kubectl create secret generic postgres-creds --from-literal postgres-password=${POSTGRES_PASSWORD} --from-literal postgres-username=${POSTGRES_USERNAME} -n dev
+  kubectl create secret generic signalfx-token --from-literal signalfx-token=${SIGNALFX_APP_ACCESS_TOKEN} -n dev
 fi
 
 # 5. Create istio egress rules
