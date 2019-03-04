@@ -113,3 +113,4 @@ done
 
 # 14. Cluster creation complete
 echo "INFO: GKE cluster with master, etcd, worker nodes along with application v1, v2, istio and monitoring took ${SECONDS} seconds to complete!"
+
