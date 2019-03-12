@@ -57,6 +57,9 @@ kubectl apply -f ${DEPLOYMENT_CONF_PATH}/istio/postgres-egress-entry.yaml
 # 6. Create istio ingress gateway
 kubectl apply -f ${DEPLOYMENT_CONF_PATH}/istio/ingress-gw.yaml
 
+# 7. Create clusterRole binding for default service account
+kubectl create clusterrolebinding default-view --clusterrole=view --serviceaccount=default:default
+
 # 7. Monitoring - SignalFX
 
 if [[ -z ${SIGNALFX_ACCESS_TOKEN} || -z ${SIGNALFX_ISTIO_ACCESS_TOKEN} ]]; then
