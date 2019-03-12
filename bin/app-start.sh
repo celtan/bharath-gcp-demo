@@ -11,3 +11,4 @@ JAVA_OPTS="${JAVA_OPTS} -javaagent:/opt/app/signalfx-tracing.jar"
 export JAEGER_ENDPOINT=http://${SFX_AGENT_HOST}:9081/v1/trace
 
 java ${JAVA_OPTS} -jar app.jar
+
