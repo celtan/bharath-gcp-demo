@@ -30,7 +30,7 @@ spec:
         prefix: /
     route:
     - destination:
-        host: crud-app-demo-1.dev.svc.cluster.local
+        host: crud-app-demo.default.example.com
         port:
           number: 8080
 
