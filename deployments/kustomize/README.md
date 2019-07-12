@@ -1,1 +1,2 @@
-Configuration to deploy using Kustomize
+Sample deployment using Kustomize
+
