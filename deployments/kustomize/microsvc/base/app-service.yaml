@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: crud-app-demo-1
+  name: crud-app-demo-1
+spec:
+  selector:
+    app: crud-app-demo-1
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: http
+  type: LoadBalancer # If using istio ingress gateway, ensure load balancer is unchecked

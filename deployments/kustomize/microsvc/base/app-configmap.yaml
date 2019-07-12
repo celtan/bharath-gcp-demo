@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: crud-app-demo-1-config
+  labels:
+    app: crud-app-demo-1
+    env: dev
+data:
+  SPRING_DATASOURCE_URL: jdbc:postgresql://10.83.48.3:5432/postgres
+  SFX_SERVICE_NAME: crud-app-demo-1
+  JAEGER_SERVICE_NAME: crud-app-demo-1
+  JAEGER_PROPAGATION: b3
+

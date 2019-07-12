@@ -1,0 +1,12 @@
+  apiVersion: kustomize.config.k8s.io/v1beta1
+  kind: Kustomization
+  namespace: staging
+  commonLabels:
+    app: crud-staging-app1
+    env: staging
+
+  bases:
+  - ../app1/
+
+  patchesStrategicMerge:
+  - app-patches.yaml 

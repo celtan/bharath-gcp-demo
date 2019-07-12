@@ -1,0 +1,61 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: crud-app-demo-1
+  name: crud-app-demo-1-v1
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: crud-app-demo-1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: crud-app-demo-1
+        version: v1
+    spec:
+      hostNetwork: true
+      containers:
+      - image: asia.gcr.io/hip-microservices-experiment-2/crud-demo-app@sha256:1d0d20effaf07fca9acbdf5b5d8330f2b917793ddfb72e9e81c3ae45d4bcf851
+        ports:
+        - containerPort: 8080
+        name: crud-app-demo-1
+        envFrom:
+        - configMapRef:
+            name: crud-app-demo-1-config
+        resources:
+          requests:
+            memory: "1536Mi"
+            cpu: "512m"
+          limits:
+            memory: "2048Mi"
+            cpu: "512m"
+        env:
+          - name: SPRING_DATASOURCE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-creds
+                key: postgres-password
+          - name: MANAGEMENT_METRICS_EXPORT_SIGNALFX_ACCESS-TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: signalfx-token
+                key: signalfx-token
+          - name: SPRING_DATASOURCE_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: postgres-creds
+                key: postgres-username
+          - name: SFX_AGENT_HOST
+            valueFrom:
+              fieldRef:
+                fieldPath: status.hostIP
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 60
+

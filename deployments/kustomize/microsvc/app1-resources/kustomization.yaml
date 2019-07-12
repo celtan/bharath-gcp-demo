@@ -1,0 +1,27 @@
+  apiVersion: kustomize.config.k8s.io/v1beta1
+  kind: Kustomization
+  namespace: staging
+  commonLabels:
+    app: crud-staging-app1
+    env: staging
+  resources:
+  - namespace.yaml
+  - app-postgress-secrets-sealed.yaml
+  - app-signal-secrets-sealed.yaml
+
+  bases:
+  - ../base/
+
+  patchesStrategicMerge:
+  - app-patches.yaml 
+  - app-cm-patch.yaml
+
+
+#  patchesJson6902:
+#  - target:
+#      group: extensions
+#      version: v1beta1
+#      kind: Deployment
+#      name: crud-app-demo-1-v1
+#    path: name_patch.json
+

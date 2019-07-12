@@ -1,0 +1,13 @@
+  apiVersion: kustomize.config.k8s.io/v1beta1
+  kind: Kustomization
+  namespace: staging
+  commonLabels:
+    app: crud-staging-app1
+    env: staging
+  images:
+  - name: asia.gcr.io/hip-microservices-experiment-2/crud-demo-app@sha256:1d0d20effaf07fca9acbdf5b5d8330f2b917793ddfb72e9e81c3ae45d4bcf851 
+    newName: nginx
+    newTag: latest 
+
+  bases:
+  - ../app1/
