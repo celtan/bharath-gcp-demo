@@ -10,4 +10,4 @@
     newTag: latest 
 
   bases:
-  - ../app1/
+  - ../app1 

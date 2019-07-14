@@ -10,4 +10,4 @@
   - app-signal-secrets-sealed.yaml
 
   bases:
-  - ../base/
+  - ../../base/
