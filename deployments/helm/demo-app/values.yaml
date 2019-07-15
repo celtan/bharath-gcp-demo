@@ -24,11 +24,6 @@ service:
   port: 8080
   targetPort: 8080
 
-configmap:
-  SPRING_DATASOURCE_URL: jdbc:postgresql://10.83.48.3:5432/postgres
-  JAEGER_PROPAGATION: b3
-  
-
 ingress:
   enabled: false
   annotations: {}

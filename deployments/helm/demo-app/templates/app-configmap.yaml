@@ -5,6 +5,4 @@ metadata:
   labels:
     app: {{ .Values.appName }}
 data:
-{{- toYaml .Values.configmap | nindent 2 }}
-  SFX_SERVICE_NAME: {{ include "demo-app.fullname" . }}-svc
-  JAEGER_SERVICE_NAME: {{ include "demo-app.fullname" . }}-svc
+{{ tpl (.Files.Get "config/configmap.properties") . | nindent 2}}
