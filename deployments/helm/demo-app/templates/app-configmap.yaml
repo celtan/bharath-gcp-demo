@@ -5,7 +5,6 @@ metadata:
   labels:
     app: {{ .Values.appName }}
 data:
-  SPRING_DATASOURCE_URL: jdbc:postgresql://10.83.48.3:5432/postgres
+{{- toYaml .Values.configmap | nindent 2 }}
   SFX_SERVICE_NAME: {{ include "demo-app.fullname" . }}-svc
   JAEGER_SERVICE_NAME: {{ include "demo-app.fullname" . }}-svc
-  JAEGER_PROPAGATION: b3
