@@ -1,0 +1,35 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ .Values.appName }}
+  name: {{ include "demo-app.fullname" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.appName }}
+  strategy:
+  {{- toYaml .Values.strategy | nindent 4 }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.appName }}
+        version: {{ .Values.appVersion }}
+    spec:
+      hostNetwork: true
+      containers:
+      - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: {{ .Values.containerPort }}
+        name: {{ .Values.appName }}
+        envFrom:
+        - configMapRef:
+            name: {{ include "demo-app.fullname" . }}-config
+        resources:
+        {{- toYaml .Values.resources | nindent 12 }}
+        env:
+        {{- toYaml .Values.env | nindent 12 }}
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 60

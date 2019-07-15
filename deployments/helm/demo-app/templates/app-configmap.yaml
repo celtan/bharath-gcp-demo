@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "demo-app.fullname" . }}-config
+  labels:
+    app: {{ .Values.appName }}
+data:
+  SPRING_DATASOURCE_URL: jdbc:postgresql://10.83.48.3:5432/postgres
+  SFX_SERVICE_NAME: {{ include "demo-app.fullname" . }}-svc
+  JAEGER_SERVICE_NAME: {{ include "demo-app.fullname" . }}-svc
+  JAEGER_PROPAGATION: b3

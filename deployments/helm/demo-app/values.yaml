@@ -1,0 +1,83 @@
+# Default values for demo-app.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 3
+
+appName: crud-app-demo-1
+appVersion: v1
+
+image:
+  repository: asia.gcr.io/hip-microservices-experiment-2/crud-demo-app@sha256
+  tag: 1d0d20effaf07fca9acbdf5b5d8330f2b917793ddfb72e9e81c3ae45d4bcf851
+  pullPolicy: IfNotPresent
+
+containerPort: 8080
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  name: http
+  type: ClusterIP
+  port: 8080
+  targetPort: 8080
+
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths: []
+
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+livenessProbe: []
+
+readinessProbe: []
+
+strategy:
+  rollingUpdate:
+    maxSurge: 1
+    maxUnavailable: 1
+  type: RollingUpdate
+
+env:
+- name: SPRING_DATASOURCE_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: postgres-creds
+      key: postgres-password
+- name: MANAGEMENT_METRICS_EXPORT_SIGNALFX_ACCESS-TOKEN
+  valueFrom:
+    secretKeyRef:
+      name: signalfx-token
+      key: signalfx-token
+- name: SPRING_DATASOURCE_USERNAME
+  valueFrom:
+    secretKeyRef:
+      name: postgres-creds
+      key: postgres-username
+- name: SFX_AGENT_HOST
+  valueFrom:
+    fieldRef:
+      fieldPath: status.hostIP
+      
+resources:
+  requests:
+    memory: "1536Mi"
+    cpu: "512m"
+  limits:
+    memory: "2048Mi"
+    cpu: "512m" 
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
