@@ -1,3 +1,34 @@
+## Directory Structure and Layout
+```bash
+microsvc/
+├── base
+│   ├── app-configmap.yaml
+│   ├── app-deployment.yaml
+│   ├── app-service.yaml
+│   └── kustomization.yaml
+└── overlays
+    ├── app1
+    │   ├── app-postgress-secrets-sealed.yaml
+    │   ├── app-signal-secrets-sealed.yaml
+    │   ├── kustomization.yaml
+    │   └── namespace.yaml
+    ├── app1-revert-image
+    │   └── kustomization.yaml
+    ├── app1-update-configmap
+    │   ├── app-cm-patch.yaml
+    │   └── kustomization.yaml
+    ├── app1-update-image
+    │   └── kustomization.yaml
+    ├── app1-update-resource
+    │   ├── app-patches.yaml
+    │   └── kustomization.yaml
+    └── app1-update-secrets
+        ├── app-postgress-secrets-sealed.yaml
+        ├── app-signal-secrets-sealed.yaml
+        └── kustomization.yaml
+```
+for simplicity the demnonstration for the various modifications have been added in as "*-updates-*" which in turn uses app1 as the base.
+
 ## Deploy to different namespaces
 1. generate the sealed secrets for the namespace
 
@@ -9,7 +40,7 @@ mv *sealed.yaml kustomize/overlays/app1
 
 ```
 
-2. Deploy to the new namespace
+2. Deploy to the cluster
 ```bash
 kubectl apply -k microsvc/overlays/app1
 ```
@@ -29,54 +60,105 @@ kubectl apply -k microsvc/overlays/app1
 kubectl apply -k microsvc/overlays/app1-update-image
 ```
 
-2. Install/upgrade the new image
-```bash
-helm install -f values.yaml demo-app --namespace=staging
-helm upgrade <chart-name> -f values.yaml demo-app --namespace=staging
-```
-
 3. Revert back to previous image
 ```bash
-helm install -f values.yaml demo-app --namespace=staging
-helm upgrade <chart-name> -f values.yaml demo-app --namespace=staging
+kubectl apply -k microsvc/overlays/app1-revert-image
 ```
 
 ## Update Resources
-1. create a new values.yaml with the required parameters to be changed; an example:
+Modify resources by adding in a patch
+
 ```bash
-resources:
-  requests:
-    memory: "1536Mi"
-    cpu: "512m"
-  limits:
-    memory: "2048Mi"
-    cpu: "512m" 
+# app-patches.yaml
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: crud-app-demo-1
+  name: crud-app-demo-1-v1
+spec:
+  template:
+    spec:
+      containers:
+      - name: crud-app-demo-1
+        resources:
+          requests:
+            memory: "1024Mi"
+            cpu: "1024m"
+          limits:
+            memory: "2048Mi"
+            cpu: "1024m"
+
+# kustomization.yaml
+  apiVersion: kustomize.config.k8s.io/v1beta1
+  kind: Kustomization
+  namespace: staging
+  commonLabels:
+    app: crud-staging-app1
+    env: staging
+
+  bases:
+  - ../app1/
+
+  patchesStrategicMerge:
+  - app-patches.yaml 
+
+# deploy to the cluster
+kubectl apply -k microsvc/overlays/app1-update-resource
 
 ```
-2. Install/upgrade the helm chart with the modified parameter
-```bash
-helm install -f values.yaml demo-app --namespace=staging
-helm upgrade <chart-name> -f values.yaml demo-app --namespace=staging
 
-# note this helm install will be result in a working install.  the configmaps need to be correctly set.  see step to update configmap 
-```
 ## Update Secrets
-as described in "Deploy to different namespaces"
-
-## Update Configmap
-This chart creates envFrom configmap.  The user will be able to update the values in the configmap from an external file. 
+Repeat the step to deploy to a different namespace with the following modification to kustomization.yaml 
 ```bash
-# create a config.properties file like so:
-SPRING_DATASOURCE_URL: jdbc:postgresql://10.83.48.3:5432/postgres
-SFX_SERVICE_NAME: {{ include "demo-app.fullname" . }}-svc
-JAEGER_SERVICE_NAME: {{ include "demo-app.fullname" . }}-svc
-JAEGER_PROPAGATION: b3
+  apiVersion: kustomize.config.k8s.io/v1beta1
+  kind: Kustomization
+  namespace: staging
+  commonLabels:
+    app: crud-staging-app1
+    env: staging
+  patchesStrategicMerge:
+  - app-postgress-secrets-sealed.yaml
+  - app-signal-secrets-sealed.yaml
 
-# run the helm install to use this config file
-helm install demo-app --namespace=staging --set-file configmap=config.properties
+  bases:
+  - ../app1
 
+# deploy to the cluster
+kubectl apply -k microsvc/overlays/app1-update-secrets
 
 ```
+## Update configmaps
+patches can once again be used to update or modify the configmaps
+```bash
+# app-cm-patch.yaml:
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: crud-app-demo-1-config
+  labels:
+    app: crud-app-demo-1
+data:
+  SPRING_DATASOURCE_URL: jdbc:postgresql://10.83.48.3:5432/postgres
+  SFX_SERVICE_NAME: crud-app-demo-1
+  JAEGER_SERVICE_NAME: crud-app-demo-1
+  JAEGER_PROPAGATION: b3
+  TEST_ENV: "this is a patch"
 
+  # kustomization.yaml
+    apiVersion: kustomize.config.k8s.io/v1beta1
+  kind: Kustomization
+  namespace: staging
+  commonLabels:
+    app: crud-staging-app1
+    env: staging
 
+  bases:
+  - ../app1/
 
+  patchesStrategicMerge:
+  - app-cm-patch.yaml 
+
+# deploy to the cluster
+kubectl apply -k microsvc/overlays/app1-update-configmap
+```

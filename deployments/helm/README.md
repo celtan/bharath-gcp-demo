@@ -39,7 +39,7 @@ helm upgrade <chart-name> -f values.yaml demo-app --namespace=staging
 ```
 
 ## Update Resources
-1. create a new values.yaml with the required parameters to be changed; an example:
+1. create a new values.yaml with the required parameters to be changed; an example might include:
 ```bash
 resources:
   requests:
@@ -52,8 +52,8 @@ resources:
 ```
 2. Install/upgrade the helm chart with the modified parameter
 ```bash
-helm install -f values.yaml demo-app --namespace=staging
-helm upgrade <chart-name> -f values.yaml demo-app --namespace=staging
+helm install -f app1/values.yaml demo-app --namespace=staging
+helm upgrade <chart-name> -f app1/values.yaml demo-app --namespace=staging
 
 # note this helm install will be result in a working install.  the configmaps need to be correctly set.  see step to update configmap 
 ```
@@ -62,6 +62,7 @@ as described in "Deploy to different namespaces"
 
 ## Update Configmap
 This chart creates envFrom configmap.  The user will be able to update the values in the configmap from an external file. 
+The external configmap.properties file and the values.yaml are found in app1.  
 ```bash
 # create a config.properties file like so:
 SPRING_DATASOURCE_URL: jdbc:postgresql://10.83.48.3:5432/postgres
@@ -70,8 +71,7 @@ JAEGER_SERVICE_NAME: {{ include "demo-app.fullname" . }}-svc
 JAEGER_PROPAGATION: b3
 
 # run the helm install to use this config file
-helm install demo-app --namespace=staging --set-file configmap=config.properties
-
+helm install demo-app --namespace=staging --set-file configmap=app1/configmap.properties -f app1/values.yaml 
 
 ```
 

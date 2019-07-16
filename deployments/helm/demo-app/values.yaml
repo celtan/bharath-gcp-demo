@@ -2,14 +2,14 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-replicaCount: 3
+replicaCount: 1
 
 appName: crud-app-demo-1
 appVersion: v1
 
 image:
-  repository: asia.gcr.io/hip-microservices-experiment-2/crud-demo-app@sha256
-  tag: 1d0d20effaf07fca9acbdf5b5d8330f2b917793ddfb72e9e81c3ae45d4bcf851
+  repository: ""
+  tag: ""
   pullPolicy: IfNotPresent
 
 containerPort: 8080
@@ -18,7 +18,7 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-configmap: "SPRING_DATASOURCE_URL: jdbc:postgresql://10.83.48.3:5432/postgres"
+configmap: ""
 
 service:
   name: http
@@ -49,27 +49,8 @@ strategy:
     maxUnavailable: 1
   type: RollingUpdate
 
-env:
-- name: SPRING_DATASOURCE_PASSWORD
-  valueFrom:
-    secretKeyRef:
-      name: postgres-creds
-      key: postgres-password
-- name: MANAGEMENT_METRICS_EXPORT_SIGNALFX_ACCESS-TOKEN
-  valueFrom:
-    secretKeyRef:
-      name: signalfx-token
-      key: signalfx-token
-- name: SPRING_DATASOURCE_USERNAME
-  valueFrom:
-    secretKeyRef:
-      name: postgres-creds
-      key: postgres-username
-- name: SFX_AGENT_HOST
-  valueFrom:
-    fieldRef:
-      fieldPath: status.hostIP
-      
+env: []
+
 resources:
   requests:
     memory: "1536Mi"
