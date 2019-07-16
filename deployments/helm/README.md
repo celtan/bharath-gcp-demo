@@ -59,7 +59,16 @@ helm upgrade <chart-name> -f values.yaml demo-app --namespace=staging
 as described in "Deploy to different namespaces"
 
 ## Update Configmap
+
 ```bash
+# create a config.properties file like so:
+SPRING_DATASOURCE_URL: jdbc:postgresql://10.83.48.3:5432/postgres
+SFX_SERVICE_NAME: {{ include "demo-app.fullname" . }}-svc
+JAEGER_SERVICE_NAME: {{ include "demo-app.fullname" . }}-svc
+JAEGER_PROPAGATION: b3
+
+# run the helm install to use this config file
+helm install demo-app --namespace=staging --set-file configmap=config.properties
 
 
 ```
