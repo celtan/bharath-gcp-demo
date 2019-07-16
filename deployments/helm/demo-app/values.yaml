@@ -18,6 +18,8 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+configmap: "SPRING_DATASOURCE_URL: jdbc:postgresql://10.83.48.3:5432/postgres"
+
 service:
   name: http
   type: ClusterIP

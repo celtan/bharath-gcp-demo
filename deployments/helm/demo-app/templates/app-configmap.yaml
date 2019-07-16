@@ -5,4 +5,4 @@ metadata:
   labels:
     app: {{ .Values.appName }}
 data:
-{{ tpl (.Files.Get "config/configmap.properties") . | nindent 2}}
+{{ tpl (.Values.configmap) . | nindent 2}}
