@@ -54,12 +54,14 @@ resources:
 ```bash
 helm install -f values.yaml demo-app --namespace=staging
 helm upgrade <chart-name> -f values.yaml demo-app --namespace=staging
+
+# note this helm install will be result in a working install.  the configmaps need to be correctly set.  see step to update configmap 
 ```
 ## Update Secrets
 as described in "Deploy to different namespaces"
 
 ## Update Configmap
-
+This chart creates envFrom configmap.  The user will be able to update the values in the configmap from an external file. 
 ```bash
 # create a config.properties file like so:
 SPRING_DATASOURCE_URL: jdbc:postgresql://10.83.48.3:5432/postgres
