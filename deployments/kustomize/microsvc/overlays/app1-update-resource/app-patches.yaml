@@ -1,8 +1,6 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  labels:
-    app: crud-app-demo-1
   name: crud-app-demo-1-v1
 spec:
   template:
